@@ -1,0 +1,84 @@
+# ----------------------------------------------------------------------- #
+#                                                                         #
+#                               YMAL文件语法                               #
+#                       http://medai.icu/thread/677                       #
+#                                                                         #
+# ----------------------------------------------------------------------- #
+# 你自己的影像数据【目录】，里面需要包括images、masks文件夹
+radio_dir: G:\WY_kidney\E
+# 带有group分组的label文件位置
+label_file: G:\WY_kidney\yuxunliang\20250901\split_info_E\label-RND-0.csv
+# 临床数据位置，不要有label和group信息
+clinic_file: G:\ZJT_LUNG\yuhou\clinical4.csv
+# 你要用什么mask id进行建模。 绝大多数都是1。 
+intra_mask_id: 1
+# 一般不用动，研究结局的列名，以及用来区分cohort的列名
+task_column: label
+dataset_column: group
+# 统计筛选衡量显著性的阈值，一般别动！可选项，0.05， 1（不做统计筛选）
+pvalue: 0.05
+# 是否使用分形维数特征，默认是False，当ROI比较小或者是单层(超声数据)的时候会导致计算失败。
+with_fd: False
+# 是否使用拓扑组学特征，默认是False
+with_toplogy: False
+# 是否使用hessian矩阵特征，默认是False
+with_hessian: False
+# 提取传统组学特征的配置文件param_file参数设置，在custom_settings文件夹里面按需选择
+extractor_settings: 
+# 是否使用SMOTE，解决样本不均衡的问题。
+use_smote: False
+# 使用MRMR模型筛选特征, 不输入数据的时候，不使用mRMR，默认不使用, 特征多的时候在考虑，Lasso的图如果有多幅，就不要用了。
+mrmr_sel_feature_num: 
+# 你打算使用什么机器学习算法建模，先全选然后挑几个好的~，最后保留3-5个。
+ml_models: [LR, SVM, RandomForest, ExtraTrees, XGBoost, LightGBM, nb, AdaBoost, GradientBoost, KNN]
+# 你自己的label文件，group列一共有多少cohorts. | ValueError: Found array with 0 sample(s)(shape=(0, 2))while a minimum of 1 is required
+# 只在指标汇总的时候生效。
+subsets: [train, test]
+# 对比不同算法
+compare_algos: [Radiomics_Adaboost, Radiomics_SVM, Radiomics_RandomForest, Radiomics_XGBoost, Clinic_LR]
+# 汇总的模型
+summary_models: [Clinic, Radiomics, Combined]
+# 筛选的模型，注意：不同的Signature可以用不同的机器学习算法。
+sel_model: 
+  Clinic: AdaBoost
+  Radiomics: AdaBoost
+# 字体大小
+font.size: 12
+# 是否显示视频
+DISABLE_VIDEO: True
+PAPER_TMP: Radiomics
+
+# DPI，一般不用动
+figure.dpi: 300
+# 画布大小，一般也不用动
+figure.figsize: [10, 8]
+# 字体大小，
+font.size: 16
+# 显示精度，保留记为小数。
+display.precision: 3
+# 线宽，直线相关的，ROC，Lasso，MSE
+display.linewidth: 4 
+# 线的类型，实线，虚线，点虚线。
+display.linestyle: ['-', ':', '--', '-.']
+# 目前支持的色系：
+# Accent, Accent_r, Blues, Blues_r, BrBG, BrBG_r, BuGn, BuGn_r, BuPu, BuPu_r, 
+# CMRmap, CMRmap_r, Dark2, Dark2_r, GnBu, GnBu_r, Greens, Greens_r, Greys, 
+# Greys_r, OrRd, OrRd_r, Oranges, Oranges_r, PRGn, PRGn_r, Paired, Paired_r, 
+# Pastel1, Pastel1_r, Pastel2, Pastel2_r, PiYG, PiYG_r, PuBu, PuBuGn, PuBuGn_r, PuBu_r, 
+# PuOr, PuOr_r, PuRd, PuRd_r, Purples, Purples_r, RdBu, RdBu_r, RdGy, RdGy_r, RdPu, 
+# RdPu_r, RdYlBu, RdYlBu_r, RdYlGn, RdYlGn_r, Reds, Reds_r, Set1, Set1_r, Set2, Set2_r, 
+# Set3, Set3_r, Spectral, Spectral_r, Wistia, Wistia_r, YlGn, YlGnBu, YlGnBu_r, YlGn_r, 
+# YlOrBr, YlOrBr_r, YlOrRd, YlOrRd_r, afmhot, afmhot_r, autumn, autumn_r, binary, binary_r, 
+# bone, bone_r, brg, brg_r, bwr, bwr_r, cividis, cividis_r, cool, cool_r, coolwarm, coolwarm_r, 
+# copper, copper_r, crest, crest_r, cubehelix, cubehelix_r, flag, flag_r, flare, flare_r, 
+# gist_earth, gist_earth_r, gist_gray, gist_gray_r, gist_heat, gist_heat_r, gist_ncar, 
+# gist_ncar_r, gist_rainbow, gist_rainbow_r, gist_stern, gist_stern_r, gist_yarg, gist_yarg_r, 
+# gnuplot, gnuplot2, gnuplot2_r, gnuplot_r, gray, gray_r, hot, hot_r, hsv, hsv_r, icefire, icefire_r, 
+# inferno, inferno_r, jet_r, magma, magma_r, mako, mako_r, nipy_spectral, nipy_spectral_r, 
+# ocean, ocean_r, pink, pink_r, plasma, plasma_r, prism, prism_r, rainbow, rainbow_r, rocket, 
+# rocket_r, seismic, seismic_r, spring, spring_r, summer, summer_r, tab10, tab10_r, tab20, tab20_r, 
+# tab20b, tab20b_r, tab20c, tab20c_r, terrain, terrain_r, twilight, twilight_r, twilight_shifted, 
+# twilight_shifted_r, viridis, viridis_r, vlag, vlag_r, winter, winter_r
+# 你也可以自己定义16进制的色彩图
+# display.colors: ['#1021F8', '#CE3E3A', '#60D830', '#1FE99C', '#E46424']
+display.colors: Set1

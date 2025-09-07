@@ -1,0 +1,83 @@
+# ----------------------------------------------------------------------- #
+#                                                                         #
+#                               YMAL文件语法                               #
+#                       http://medai.icu/thread/677                       #
+#                                                                         #
+# ----------------------------------------------------------------------- #
+# 数据patches存放的位置，一般情况下，前置需要3个步骤
+# 1. 使用OKT-crop_WSI2patch，将所有的WSI数据转化成jpg数据。
+# 参数说明：
+  # --num_process #Cores/2
+  # --tile_size 512，磁片的大小
+  # --level 20x ，放大倍数，默认使用20x
+  # --overwrite 是否使用缓存 | 默认缓存
+# 2. 使用OKT-patch2predict，将所有的patch的黑边去掉。
+# 参数说明：
+  # --num_process #Cores/2
+  # --overwrite 是否使用缓存 | 默认缓存
+  # --del_image，是否直接删除，默认为False
+  # --bright_threshold，0-255，数值越大，准确越高，召回越低
+# 3. 使用OKT-patch_normalize，对数据进行标准化。
+# 参数说明：
+  # --method 可选：Reinhard, Macenko, Vahadane
+  # --num_process #Cores/2
+
+# Patch所在的目录
+data_pattern: ONEKEYDS_HOME\multi_modal_omics\patches
+# label文件位置，注意这里需要是多中心的配置，包括group信息。
+label_col: label
+dataset_col: group
+label_file: split_info\label-RND-0.csv
+# ----------------------- 病理模型超参配置 -----------------------#
+epoch: 1 # 一般为30 ~ 50
+model_root: models # 模型存放的路径，如果是绝对目录，使用"绝对路径"
+# | **模型系列**  | **模型名称**                                                 |
+# | ------------ | ------------------------------------------------------------ |
+# | AlexNet      | alexnet                                                      |
+# | VGG          | vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19_bn, vgg19 |
+# | ResNet       | resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, resnext101_32x8d, wide_resnet50_2, wide_resnet101_2 |
+# | DenseNet     | densenet121, densenet169, densenet201, densenet161           |
+# | Inception    | googlenet, inception_v3                                      |
+# | SqueezeNet   | squeezenet1_0, squeezenet1_1                                 |
+# | ShuffleNetV2 | shufflenet_v2_x2_0, shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5 |
+# | MobileNet    | mobilenet_v2, mobilenet_v3_large, mobilenet_v3_small         |
+# | MNASNet      | mnasnet0_5, mnasnet0_75, mnasnet1_0, mnasnet1_3              |
+# | ViT          | ViT, SimpleViT, CrossFormer, TwinsSVT|
+# 挑几个你喜欢的~
+model_name: [resnet18, resnet50]
+# 挑选一个最好的~
+sel_model: resnet50
+# 那些cohort进行汇总
+subsets: [train, test]
+# 多实例学习，对特征建模用到的机器学习算法
+ml_models:
+  - LR
+  - SVM
+  - KNN
+  - RandomForest
+  - ExtraTrees
+  - XGBoost
+  - LightGBM
+  - MLP
+  - NB
+  - GradientBoost
+# 是否使用SMOTE采样，解决样本不均衡的问题
+use_smote: False
+### ------------------------ 临床任务配置 ------------------------ ###
+# 临床特征文件路径
+# 注意1：临床文件种不能包括任何中文字符
+# 注意2：文件种，不要有label、group列
+clinic_file: ONEKEYDS_HOME\multi_modal_omics\CT\Clinical.csv
+# 用于做临床特征筛选的pvalue
+p_value: 0.05
+### ------------------------ 汇总任务配置 ------------------------ ###
+# ROC、校准、DCA、Delong汇总对比的模型。
+summary_models: [Clinic, Path, Combined]
+sig_sel_model: 
+  Clinic: LR
+  Path: LR
+
+### ------------------------ 不用动 ------------------------------ ###
+font.size: 12
+DISABLE_VIDEO: True
+PAPER_TMP: Pathomics

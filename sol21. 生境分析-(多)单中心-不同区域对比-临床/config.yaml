@@ -1,0 +1,52 @@
+# ----------------------------------------------------------------------- #
+#                                                                         #
+#                               YMAL文件语法                               #
+#                       http://medai.icu/thread/677                       #
+#                                                                         #
+# ----------------------------------------------------------------------- #
+# 你自己的影像数据【目录】
+radio_dir: C:\Users\onekey\Desktop\demo
+# 生境区域的目录
+habitat_dir: C:\Users\onekey\Desktop\demo\habitat\cluster_3
+# 带有group分组的label文件位置
+label_file: split_info\label-RND-0.csv
+# 临床数据位置，不要有label和group信息
+clinic_file: C:\Users\onekey\Desktop\demo\clinical.csv
+p_value: 0.05
+habitats: [1, 2, 3]
+extractor_settings: 
+task_column: label
+dataset_column: group
+# 生境特征融合的手段，fill、remap、min、max、mean
+# fill：基于KNN的方法，将缺少生境区域的样本，使用差值的方法进行填充。
+# remap：适用于OKT-gen_habitat_cluster --separate。基于onekey自研的方法，通过重新映射
+#         的逻辑，将区域进行重排，得到最终的特征。
+# min：具有相同特征名称的特征，在不同的生境区域之间取最小值。
+# max：具有相同特征名称的特征，在不同的生境区域之间取最大值。
+# mean：具有相同特征名称的特征，在不同的生境区域之间取均值。
+fusion_mode: fill
+mrmr_sel_feature_num: 
+# 是否使用smote
+use_smote: False
+# 是否使用分形维度特征，ROI略大一些，超声没用~
+with_fd: False
+ml_models: [LR, SVM, KNN, RandomForest, ExtraTrees, XGBoost, LightGBM, MLP, AdaBoost, GradientBoost, NaiveBayes]
+# 对比不同算法 Step6.1
+compare_algos: [Intra_LR, Intra_SVM, Habitat_LR, Habitat_SVM, HabitatH1_LR, HabitatH1_SVM]
+# 对比不同模型  Step6.2
+compare_models: [Intra, HabitatH1, HabitatH2, Habitat]
+# ROC、校准、DCA、Delong汇总对比的模型。 Step6.3
+summary_models: [Clinic, Intra, HabitatH1, Habitat]
+# 用来与临床融合的模型名称
+fusion_models: [Intra, HabitatH1, Habitat]
+# 指定每个Signature对比的模型。 一般是选最好的。val最好的【多中心】，test【单中心】
+sel_model: 
+  Clinic: LR
+  Intra: SVM
+  Habitat: LR
+  HabitatH1: LR
+  HabitatH2: LR
+subsets: [train, test]
+font.size: 12
+DISABLE_VIDEO: True
+PAPER_TMP: Habitat
